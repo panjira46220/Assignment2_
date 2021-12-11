@@ -1,0 +1,305 @@
+
+User@DESKTOP-IQGNI08 MINGW64 ~
+$ cd Desktop
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop
+$ cd cm_replica_demo
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$ mongod --replSet cmpos --logpath ./r1.log --dbpath ./r1 --port 27018 &
+[1] 1482
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$ mongod --replSet cmpos --logpath ./r2.log --dbpath ./r2 --port 27019 &
+[2] 1486
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$ mongod --replSet cmpos --logpath ./r3.log --dbpath ./r3 --port 27020 &
+[3] 1490
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$ mongo --port 27018
+MongoDB shell version v5.0.5
+connecting to: mongodb://127.0.0.1:27018/?compressors=disabled&gssapiServiceName=mongodb
+Implicit session: session { "id" : UUID("2293cb15-8426-40c3-a7a1-c2c5a7e0b209") }
+MongoDB server version: 5.0.5
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-12-11T22:30:31.730+07:00: Access control is not enabled for the database. Read 
+and write access to data and configuration is unrestricted
+        2021-12-11T22:30:31.730+07:00: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+> config = {_id: "cmpos", members:[   
+... {_id: 0, host: "localhost:27018"},
+... {_id: 1, host: "localhost:27019"},
+... {_id: 2, host: "localhost:27020"}]
+... };
+{
+        "_id" : "cmpos",
+        "members" : [
+                {
+                        "_id" : 0,
+                        "host" : "localhost:27018"
+                },
+                {
+                        "_id" : 1,
+                        "host" : "localhost:27019"
+                },
+                {
+                        "_id" : 2,
+                        "host" : "localhost:27020"
+                }
+        ]
+}
+> rs.initiate(config);
+{ "ok" : 1 }
+cmpos:SECONDARY> 
+cmpos:PRIMARY> rs.status();
+{
+        "set" : "cmpos",
+        "date" : ISODate("2021-12-11T15:52:57.956Z"),
+        "myState" : 1,
+        "term" : NumberLong(1),
+        "syncSourceHost" : "",
+        "syncSourceId" : -1,
+        "heartbeatIntervalMillis" : NumberLong(2000),
+        "majorityVoteCount" : 2,
+        "writeMajorityCount" : 2,
+        "votingMembersCount" : 3,
+        "writableVotingMembersCount" : 3,
+        "optimes" : {
+                "lastCommittedOpTime" : {
+                        "ts" : Timestamp(1639237976, 1),
+                        "t" : NumberLong(1)
+                },
+                "lastCommittedWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                "readConcernMajorityOpTime" : {
+                        "ts" : Timestamp(1639237976, 1),
+                        "t" : NumberLong(1)
+                },
+                "appliedOpTime" : {
+                        "ts" : Timestamp(1639237976, 1),
+                        "t" : NumberLong(1)
+                },
+                "durableOpTime" : {
+                        "ts" : Timestamp(1639237976, 1),
+                        "t" : NumberLong(1)
+                },
+                "lastAppliedWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                "lastDurableWallTime" : ISODate("2021-12-11T15:52:56.843Z")
+        },
+        "lastStableRecoveryTimestamp" : Timestamp(1639237916, 1),
+        "electionCandidateMetrics" : {
+                "lastElectionReason" : "electionTimeout",
+                "lastElectionDate" : ISODate("2021-12-11T15:47:16.789Z"),
+                "electionTerm" : NumberLong(1),
+                "lastCommittedOpTimeAtElection" : {
+                        "ts" : Timestamp(1639237625, 1),
+                        "t" : NumberLong(-1)
+                },
+                "lastSeenOpTimeAtElection" : {
+                        "ts" : Timestamp(1639237625, 1),
+                        "t" : NumberLong(-1)
+                },
+                "numVotesNeeded" : 2,
+                "priorityAtElection" : 1,
+                "electionTimeoutMillis" : NumberLong(10000),
+                "numCatchUpOps" : NumberLong(0),
+                "newTermStartDate" : ISODate("2021-12-11T15:47:16.813Z"),
+                "wMajorityWriteAvailabilityDate" : ISODate("2021-12-11T15:47:16.997Z")
+        },
+        "members" : [
+                {
+                        "_id" : 0,
+                        "name" : "localhost:27018",
+                        "health" : 1,
+                        "state" : 1,
+                        "stateStr" : "PRIMARY",
+                        "uptime" : 1346,
+                        "optime" : {
+                                "ts" : Timestamp(1639237976, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2021-12-11T15:52:56Z"),
+                        "lastAppliedWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                        "lastDurableWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                        "syncSourceHost" : "",
+                        "syncSourceId" : -1,
+                        "infoMessage" : "",
+                        "electionTime" : Timestamp(1639237636, 1),
+                        "electionDate" : ISODate("2021-12-11T15:47:16Z"),
+                        "configVersion" : 1,
+                        "configTerm" : 1,
+                        "self" : true,
+                        "lastHeartbeatMessage" : ""
+                },
+                {
+                        "_id" : 1,
+                        "name" : "localhost:27019",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 352,
+                        "optime" : {
+                                "ts" : Timestamp(1639237976, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1639237976, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2021-12-11T15:52:56Z"),
+                        "optimeDurableDate" : ISODate("2021-12-11T15:52:56Z"),
+                        "lastAppliedWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                        "lastDurableWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                        "lastHeartbeat" : ISODate("2021-12-11T15:52:56.903Z"),
+                        "lastHeartbeatRecv" : ISODate("2021-12-11T15:52:57.419Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncSourceHost" : "localhost:27018",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1,
+                        "configTerm" : 1
+                },
+                {
+                        "_id" : 2,
+                        "name" : "localhost:27020",
+                        "health" : 1,
+                        "state" : 2,
+                        "stateStr" : "SECONDARY",
+                        "uptime" : 352,
+                        "optime" : {
+                                "ts" : Timestamp(1639237976, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDurable" : {
+                                "ts" : Timestamp(1639237976, 1),
+                                "t" : NumberLong(1)
+                        },
+                        "optimeDate" : ISODate("2021-12-11T15:52:56Z"),
+                        "optimeDurableDate" : ISODate("2021-12-11T15:52:56Z"),
+                        "lastAppliedWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                        "lastDurableWallTime" : ISODate("2021-12-11T15:52:56.843Z"),
+                        "lastHeartbeat" : ISODate("2021-12-11T15:52:56.903Z"),
+                        "lastHeartbeatRecv" : ISODate("2021-12-11T15:52:57.411Z"),
+                        "pingMs" : NumberLong(0),
+                        "lastHeartbeatMessage" : "",
+                        "syncSourceHost" : "localhost:27018",
+                        "syncSourceId" : 0,
+                        "infoMessage" : "",
+                        "configVersion" : 1,
+                        "configTerm" : 1
+                }
+        ],
+        "ok" : 1,
+        "$clusterTime" : {
+                "clusterTime" : Timestamp(1639237976, 1),
+                "signature" : {
+                        "hash" : BinData(0,"AAAAAAAAAAAAAAAAAAAAAAAAAAA="),
+                        "keyId" : NumberLong(0)
+                }
+        },
+        "operationTime" : Timestamp(1639237976, 1)
+}
+cmpos:PRIMARY> exit
+bye
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$ mongo --host cmpos/localhost:27018,localhost:27019,localhost:27020
+MongoDB shell version v5.0.5
+connecting to: mongodb://localhost:27018,localhost:27019,localhost:27020/?compressors=disabled&gssapiServiceName=mongodb&replicaSet=cmpos
+Implicit session: session { "id" : UUID("0f2f6d12-008c-4520-a4ab-5bbc7509b262") }
+MongoDB server version: 5.0.5
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in  
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-12-11T22:30:31.730+07:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+        2021-12-11T22:30:31.730+07:00: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+cmpos:PRIMARY> ^C
+bye
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$
+
+User@DESKTOP-IQGNI08 MINGW64 ~/Desktop/cm_replica_demo
+$ mongo --host cmpos/localhost:27018,localhost:27019,localhost:27020
+MongoDB shell version v5.0.5
+connecting to: mongodb://localhost:27018,localhost:27019,localhost:27020/?compressors=disabled&gssapiServiceName=mongodb&replicaSet=cmpos
+Implicit session: session { "id" : UUID("9aa3547f-2a80-4ba0-828a-8e56e6cf55c5") }
+MongoDB server version: 5.0.5
+================
+Warning: the "mongo" shell has been superseded by "mongosh",
+which delivers improved usability and compatibility.The "mongo" shell has been deprecated and will be removed in  
+an upcoming release.
+For installation instructions, see
+https://docs.mongodb.com/mongodb-shell/install/
+================
+---
+The server generated these startup warnings when booting:
+        2021-12-11T22:30:31.730+07:00: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+        2021-12-11T22:30:31.730+07:00: This server is bound to localhost. Remote systems will be unable to connect to this server. Start the server with --bind_ip <address> to specify which IP addresses it should serve responses from, or with --bind_ip_all to bind to all interfaces. If this behavior is desired, start the server with --bind_ip 127.0.0.1 to disable this warning
+---
+---
+        Enable MongoDB's free cloud-based monitoring service, which will then receive and display
+        metrics about your deployment (disk utilization, CPU, operation statistics, etc).
+
+        The monitoring data will be available on a MongoDB website with a unique URL accessible to you
+        and anyone you share the URL with. MongoDB may use this information to make product
+        improvements and to suggest MongoDB products and deployment options to you.
+
+        To enable free monitoring, run the following command: db.enableFreeMonitoring()
+        To permanently disable this reminder, run the following command: db.disableFreeMonitoring()
+---
+cmpos:PRIMARY>   ำ
+cmpos:PRIMARY> use codetest
+switched to db codetest
+cmpos:PRIMARY> db.getCollection('courses').find({})
+cmpos:PRIMARY> use codemobiles
+switched to db codemobiles
+cmpos:PRIMARY> db.getCollection('courses').find({})
+{ "_id" : ObjectId("61b4ce821344a58e30df99cd"), "title" : "React", "price" : 10 }
+{ "_id" : ObjectId("61b4ced61344a58e30df9adb"), "title" : "Vue.js", "price" : 10 }
+cmpos:PRIMARY> db.getCollection('courses').find({})db.getCollection('courses').find({})
+uncaught exception: SyntaxError: unexpected token: identifier :
+@(shell):1:36
+cmpos:PRIMARY> db.getCollection('courses').find({})
+{ "_id" : ObjectId("61b4ce821344a58e30df99cd"), "title" : "React", "price" : 10 }
+{ "_id" : ObjectId("61b4ced61344a58e30df9adb"), "title" : "Vue.js", "price" : 10 }
+cmpos:PRIMARY>
